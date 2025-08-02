@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import * as XLSX from 'xlsx';
 import {
@@ -10,7 +10,8 @@ import {
   getSortedRowModel,
   flexRender,
 } from '@tanstack/react-table';
-import { FaSort, FaSortUp, FaSortDown, FaEdit, FaSearch } from 'react-icons/fa';
+import { deleteContact } from '../app/contactsSlice';
+import { FaSort, FaSortUp, FaSortDown, FaEdit, FaSearch, FaTrash } from 'react-icons/fa';
 
 // GlobalFilter component remains the same
 const GlobalFilter = ({ filter, setFilter }) => (
@@ -29,12 +30,19 @@ const GlobalFilter = ({ filter, setFilter }) => (
 
 const ContactListPage = () => {
   const data = useSelector((state) => state.contacts.data);
+  const dispatch = useDispatch();
   const [sorting, setSorting] = useState([]);
   const [globalFilter, setGlobalFilter] = useState('');
   const [columnFilters, setColumnFilters] = useState([]);
   const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
 
-  // --- UPDATED: All columns are now included ---
+  // The function to handle the delete action
+  const handleDelete = (contactId) => {
+    if (window.confirm('Are you sure you want to delete this contact?')) {
+      dispatch(deleteContact(contactId));
+    }
+  };
+
   const columns = useMemo(
     () => [
       {
@@ -47,6 +55,7 @@ const ContactListPage = () => {
         ),
         enableSorting: false,
       },
+      // --- All data columns are now here ---
       { header: 'Name', accessorKey: 'name', cell: (info) => <span className="name-cell">{info.getValue()}</span> },
       { header: 'Email', accessorKey: 'email' },
       { header: 'Primary Phone', accessorKey: 'phone' },
@@ -68,8 +77,19 @@ const ContactListPage = () => {
       { header: 'Address line', accessorKey: 'addressLine' },
       { header: 'Remarks', accessorKey: 'remarks' },
       { header: 'Created Date', accessorKey: 'createdDate' },
+      // --- The Delete column has been moved to the end ---
+      {
+        header: 'Delete',
+        id: 'delete',
+        cell: ({ row }) => (
+          <button onClick={() => handleDelete(row.original.id)} className="delete-btn">
+            <FaTrash size={16} />
+          </button>
+        ),
+        enableSorting: false,
+      },
     ],
-    []
+    [dispatch]
   );
 
   const table = useReactTable({

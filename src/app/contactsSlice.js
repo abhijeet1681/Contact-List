@@ -8,7 +8,6 @@ const contactsSlice = createSlice({
   },
   reducers: {
     addContact: (state, action) => {
-      // Add a unique ID to the new contact
       const newContact = { id: crypto.randomUUID(), ...action.payload };
       state.data.unshift(newContact);
     },
@@ -18,8 +17,14 @@ const contactsSlice = createSlice({
         state.data[index] = action.payload;
       }
     },
+    // --- NEW: Delete Reducer ---
+    deleteContact: (state, action) => {
+      // The payload will be the id of the contact to delete
+      state.data = state.data.filter(contact => contact.id !== action.payload);
+    },
   },
 });
 
-export const { addContact, updateContact } = contactsSlice.actions;
+// Export the new action
+export const { addContact, updateContact, deleteContact } = contactsSlice.actions;
 export default contactsSlice.reducer;

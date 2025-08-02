@@ -362,3 +362,17 @@ td {
 .sidebar-overlay {
   display: none;
 }
+
+/* ... (keep all your other styles) ... */
+
+/* Add this to your table or button styles section */
+.data-table .delete-btn {
+  background: none;
+  border: none;
+  color: #ef4444; /* Red color for delete */
+  cursor: pointer;
+  padding: 0;
+}
+.data-table .delete-btn:hover {
+  color: #b91c1c; /* Darker red on hover */
+}
