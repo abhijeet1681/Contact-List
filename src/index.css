@@ -1,0 +1,217 @@
+/* --- 1. Global Styles & Variables --- */
+:root {
+  --color-green: #22c55e;
+  --color-green-dark: #16a34a;
+  --color-blue: #3b82f6;
+  --color-blue-dark: #2563eb;
+  --color-dark: #1f2937;
+  --color-dark-hover: #111827;
+  --text-primary: #1f2937;
+  --text-secondary: #6b7280;
+  --text-link: #3b82f6;
+  --bg-light: #f9fafb;
+  --bg-white: #ffffff;
+  --border-color: #e5e7eb;
+  --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  background-color: var(--bg-light);
+  color: var(--text-primary);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* --- 2. Main Layout & Sidebar --- */
+.layout-container {
+  display: flex;
+  min-height: 100vh;
+}
+
+.main-content {
+  flex: 1; /* Allows the main area to grow */
+  padding: 2rem;
+  height: 100vh;
+  overflow-y: auto; /* Enables vertical scroll ONLY if content overflows */
+  min-width: 0; /* Prevents flex items from overflowing their container */
+}
+
+.sidebar {
+  width: 16rem;
+  background-color: var(--bg-white);
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--shadow);
+  flex-shrink: 0;
+}
+
+.sidebar-header {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 2.5rem;
+  padding-left: 0.5rem;
+}
+
+/* ... other sidebar styles like .nav-link, etc. ... */
+.sidebar nav ul { list-style: none; padding: 0; margin: 0; }
+.nav-item { margin-bottom: 0.5rem; }
+.nav-link { display: flex; align-items: center; padding: 0.75rem; border-radius: 0.375rem; transition: background-color 0.2s, color 0.2s; text-decoration: none; font-size: 0.875rem; font-weight: 500; color: var(--text-secondary); }
+.nav-link:hover { background-color: var(--bg-light); color: var(--text-primary); }
+.nav-link.active { background-color: var(--bg-light); color: var(--text-primary); font-weight: 600; }
+.nav-link svg { margin-right: 1rem; font-size: 1.25rem; }
+
+
+/* --- 3. Page Containers & Headers --- */
+/* Universal container for pages like Contact List */
+.page-container {
+  background-color: var(--bg-white);
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  box-shadow: var(--shadow);
+}
+
+/* Universal wrapper for pages like Create/Edit Contact */
+.page-wrapper h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    color: var(--text-primary);
+}
+
+.page-header {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.page-title h2 { font-size: 1.5rem; font-weight: 700; margin: 0; }
+.page-title p { color: var(--text-secondary); margin-top: 0.25rem; }
+
+
+/* --- 4. Form Styles --- */
+.form-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.form-section-card {
+  background-color: var(--bg-white);
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  box-shadow: var(--shadow);
+}
+
+.form-section-header {
+  display: inline-block;
+  background-color: var(--color-green);
+  color: var(--bg-white);
+  padding: 0.5rem 1.5rem;
+  border-radius: 0.25rem;
+  font-weight: 500;
+  margin-bottom: 1.5rem;
+}
+
+.form-grid-3-col {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem 1rem;
+}
+
+.input-group,
+.textarea-group,
+.select-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.input-group label,
+.textarea-group label,
+.select-group label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin-bottom: 0.25rem;
+  color: var(--text-secondary);
+}
+
+.input-group input,
+.textarea-group textarea,
+.select-group select {
+  padding: 0.6rem 0.75rem;
+  border: 1px solid var(--border-color);
+  border-radius: 0.375rem;
+  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  font-size: 0.875rem;
+  background-color: var(--bg-white);
+  color: var(--text-primary);
+}
+
+.textarea-group textarea {
+  min-height: 80px;
+}
+
+.input-group input:focus,
+.textarea-group textarea:focus,
+.select-group select:focus {
+  outline: 1px solid var(--color-green);
+  border-color: var(--color-green);
+}
+
+.input-error-message {
+  color: #ef4444;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+}
+
+.input-error {
+  border-color: #ef4444 !important;
+}
+
+.form-submit-button {
+    background-color: var(--color-dark);
+    color: white;
+    padding: 0.6rem 2rem;
+    border: none;
+    border-radius: 0.25rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.form-submit-button:hover {
+    background-color: var(--color-dark-hover);
+}
+
+
+/* --- 5. Table & List Page Controls --- */
+.table-wrapper { overflow-x: auto; }
+.data-table { width: 100%; text-align: left; font-size: 0.875rem; border-collapse: collapse; }
+.data-table thead { background-color: var(--bg-light); color: var(--text-secondary); text-transform: uppercase; }
+.data-table th { padding: 1rem; font-weight: 600; cursor: pointer; }
+.data-table th div { display: flex; align-items: center; gap: 0.5rem; }
+.data-table td { padding: 1rem; border-bottom: 1px solid var(--border-color); }
+.data-table .name-cell { color: var(--text-link); font-weight: 600; }
+.data-table .edit-btn { background: none; border: none; color: var(--color-green); cursor: pointer; }
+.data-table .edit-btn:hover { color: var(--color-green-dark); }
+.header-controls { display: flex; align-items: center; gap: 0.75rem; }
+.search-input-wrapper { position: relative; }
+.search-input-wrapper svg { position: absolute; top: 50%; left: 0.75rem; transform: translateY(-50%); color: #9ca3af; }
+.search-input { padding: 0.5rem 0.5rem 0.5rem 2.5rem; border: 1px solid var(--border-color); border-radius: 0.375rem; }
+.pagination-controls { display: flex; align-items: center; justify-content: space-between; margin-top: 1.5rem; font-size: 0.875rem; }
+.pagination-controls button { padding: 0.25rem 0.75rem; border: 1px solid var(--border-color); border-radius: 0.375rem; background-color: var(--bg-white); cursor: pointer; }
+.pagination-controls button:hover:not(:disabled) { background-color: var(--bg-light); }
+.pagination-controls button:disabled { opacity: 0.5; cursor: not-allowed; }
+.pagination-nav { display: flex; align-items: center; gap: 0.5rem; }
+.btn { padding: 0.5rem 1rem; border: none; border-radius: 0.375rem; color: white; font-weight: 500; cursor: pointer; transition: background-color 0.2s; text-decoration: none; display: inline-block; }
+.btn-green { background-color: var(--color-green); }
+.btn-green:hover { background-color: var(--color-green-dark); }
+.btn-blue { background-color: var(--color-blue); }
+.btn-blue:hover { background-color: var(--color-blue-dark); }
