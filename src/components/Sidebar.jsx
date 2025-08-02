@@ -3,7 +3,6 @@ import { Link, useLocation } from 'react-router-dom';
 import { FaTachometerAlt, FaUser, FaUserFriends, FaHandshake, FaBullhorn, FaList } from 'react-icons/fa';
 
 const navItems = [
-  // ... (navItems array remains the same)
   { name: 'Dashboard', path: '/dashboard', icon: FaTachometerAlt },
   { name: 'Account', path: '/account', icon: FaUser },
   { name: 'Contact', path: '/contacts', icon: FaUserFriends },
@@ -12,11 +11,20 @@ const navItems = [
   { name: 'Feedback List', path: '/feedback', icon: FaList },
 ];
 
-const Sidebar = () => {
+// Sidebar now accepts props to control its state on mobile
+const Sidebar = ({ isSidebarOpen, closeSidebar }) => {
   const location = useLocation();
 
+  const handleLinkClick = () => {
+    // Close the sidebar when a link is clicked on smaller screens
+    if (window.innerWidth <= 768) {
+        closeSidebar();
+    }
+  };
+
   return (
-    <aside className="sidebar">
+    // Conditionally apply the 'open' class based on the prop
+    <aside className={`sidebar ${isSidebarOpen ? 'open' : ''}`}>
       <h2 className="sidebar-header">My CRM</h2>
       <nav>
         <ul>
@@ -25,6 +33,7 @@ const Sidebar = () => {
               <Link
                 to={item.path}
                 className={`nav-link ${location.pathname.startsWith(item.path) ? 'active' : ''}`}
+                onClick={handleLinkClick} // Add the click handler here
               >
                 <item.icon />
                 {item.name}
