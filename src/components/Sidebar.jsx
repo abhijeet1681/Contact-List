@@ -25,7 +25,7 @@ const Sidebar = ({ isSidebarOpen, closeSidebar }) => {
   return (
     // Conditionally apply the 'open' class based on the prop
     <aside className={`sidebar ${isSidebarOpen ? 'open' : ''}`}>
-      <h2 className="sidebar-header">My CRM</h2>
+      <h2 className="sidebar-header">Abhijeet Jadhav</h2>
       <nav>
         <ul>
           {navItems.map((item) => (
