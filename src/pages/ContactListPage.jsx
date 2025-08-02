@@ -12,7 +12,7 @@ import {
 } from '@tanstack/react-table';
 import { FaSort, FaSortUp, FaSortDown, FaEdit, FaSearch } from 'react-icons/fa';
 
-// Keeping GlobalFilter here for simplicity, as it's only used on this page
+// GlobalFilter component remains the same
 const GlobalFilter = ({ filter, setFilter }) => (
     <div className="search-input-wrapper">
       <FaSearch />
@@ -20,7 +20,7 @@ const GlobalFilter = ({ filter, setFilter }) => (
         type="text"
         value={filter || ''}
         onChange={(e) => setFilter(e.target.value)}
-        placeholder="Search..."
+        placeholder="Search all columns..."
         className="search-input"
       />
     </div>
@@ -31,31 +31,43 @@ const ContactListPage = () => {
   const data = useSelector((state) => state.contacts.data);
   const [sorting, setSorting] = useState([]);
   const [globalFilter, setGlobalFilter] = useState('');
+  const [columnFilters, setColumnFilters] = useState([]);
+  const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
 
+  // --- UPDATED: All columns are now included ---
   const columns = useMemo(
     () => [
       {
         header: 'Edit',
         id: 'edit',
-        cell: ({ row }) => ( // <-- The cell now gets the row object
-          // Link to the edit page with the contact's ID
+        cell: ({ row }) => (
           <Link to={`/contacts/edit/${row.original.id}`} className="edit-btn">
             <FaEdit size={18} />
           </Link>
         ),
         enableSorting: false,
       },
+      { header: 'Name', accessorKey: 'name', cell: (info) => <span className="name-cell">{info.getValue()}</span> },
+      { header: 'Email', accessorKey: 'email' },
+      { header: 'Primary Phone', accessorKey: 'phone' },
       { header: 'Contact Owner', accessorKey: 'contactOwner' },
       { header: 'Account Name', accessorKey: 'accountName' },
-      {
-        header: 'Name',
-        accessorKey: 'name',
-        cell: (info) => <span className="name-cell">{info.getValue()}</span>,
-      },
-      { header: 'Email', accessorKey: 'email' },
-      { header: 'Phone', accessorKey: 'phone' },
-      { header: 'Created Date', accessorKey: 'createdDate' },
       { header: 'Contact Source', accessorKey: 'contactSource' },
+      { header: 'Secondary Email', accessorKey: 'secondaryEmail' },
+      { header: 'Mobile No 1', accessorKey: 'mobileNo1' },
+      { header: 'Mobile No 2', accessorKey: 'mobileNo2' },
+      { header: 'Twitter', accessorKey: 'twitter' },
+      { header: 'Skype Id', accessorKey: 'skypeId' },
+      { header: 'LinkedIn bio', accessorKey: 'linkedinBio' },
+      { header: 'Appointment Status', accessorKey: 'appointmentStatus' },
+      { header: 'Appointment Date', accessorKey: 'appointmentDate' },
+      { header: 'Appointment Time', accessorKey: 'appointmentTime' },
+      { header: 'City', accessorKey: 'city' },
+      { header: 'State', accessorKey: 'state' },
+      { header: 'Country', accessorKey: 'country' },
+      { header: 'Address line', accessorKey: 'addressLine' },
+      { header: 'Remarks', accessorKey: 'remarks' },
+      { header: 'Created Date', accessorKey: 'createdDate' },
     ],
     []
   );
@@ -63,9 +75,14 @@ const ContactListPage = () => {
   const table = useReactTable({
     data,
     columns,
-    state: { sorting, globalFilter },
+    state: {
+        sorting,
+        globalFilter,
+        columnFilters,
+    },
     onSortingChange: setSorting,
     onGlobalFilterChange: setGlobalFilter,
+    onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
@@ -94,6 +111,9 @@ const ContactListPage = () => {
         </div>
         <div className="header-controls">
           <GlobalFilter filter={globalFilter} setFilter={setGlobalFilter} />
+          <button onClick={() => setShowAdvancedFilters(!showAdvancedFilters)} className="btn btn-secondary">
+            Filters
+          </button>
           <button onClick={downloadExcel} className="btn btn-green">
             Export
           </button>
@@ -102,6 +122,34 @@ const ContactListPage = () => {
           </Link>
         </div>
       </header>
+
+      {showAdvancedFilters && (
+        <div className="advanced-filter-container">
+            <div className="filter-group">
+                <label htmlFor="owner-filter">Filter by Owner</label>
+                <input
+                    id="owner-filter"
+                    type="text"
+                    value={(table.getColumn('contactOwner')?.getFilterValue() ?? '')}
+                    onChange={e => table.getColumn('contactOwner')?.setFilterValue(e.target.value)}
+                    placeholder="Owner name..."
+                />
+            </div>
+            <div className="filter-group">
+                <label htmlFor="source-filter">Filter by Source</label>
+                 <select
+                    id="source-filter"
+                    value={(table.getColumn('contactSource')?.getFilterValue() ?? '')}
+                    onChange={e => table.getColumn('contactSource')?.setFilterValue(e.target.value)}
+                 >
+                    <option value="">All Sources</option>
+                    <option value="Database">Database</option>
+                    <option value="Web">Web</option>
+                    <option value="Referral">Referral</option>
+                 </select>
+            </div>
+        </div>
+      )}
 
       <div className="table-wrapper">
         <table className="data-table">
@@ -134,8 +182,8 @@ const ContactListPage = () => {
       </div>
 
       <div className="pagination-controls">
-        <span className="pagination-info">
-          Showing {table.getState().pagination.pageIndex * 10 + 1} to {table.getState().pagination.pageIndex * 10 + table.getRowModel().rows.length} of {data.length} entries
+         <span className="pagination-info">
+          Showing {table.getRowModel().rows.length} of {data.length} entries
         </span>
         <div className="pagination-nav">
           <button onClick={() => table.previousPage()} disabled={!table.getCanPreviousPage()}>
